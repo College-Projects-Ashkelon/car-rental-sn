@@ -20,6 +20,9 @@ public class Main {
         // 3. בדיקת התחברות KAN-360
         testKAN360(scanner, system);
 
+        // 4. KAN-377 Test (Fleet Management: KAN-378 to KAN-381)
+        testKAN377(scanner, system);
+
         scanner.close();
 
     }
@@ -73,5 +76,16 @@ public class Main {
         }
         System.out.println("✅ KAN-360 User Login test completed!");
     }
+    // 📌 [KAN-377] פונקציית בדיקה המריצה את תתי-הסטורים (KAN-378 עד KAN-381)
+    public static void testKAN377(Scanner scanner, RentalSystem system) {
+        System.out.println("\n--- [Test] KAN-377: Fleet Management ---");
 
+        // הרצת הוספת רכב לצי
+        system.addCar(scanner);
+
+        // הרצת חיפוש והצגת רכבים
+        system.searchCars();
+
+        System.out.println("✅ KAN-377 Fleet Management test completed!");
+    }
 }

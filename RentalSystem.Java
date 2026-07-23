@@ -99,7 +99,7 @@ public class RentalSystem {
         }
         return false;
     }
-
+    // === KAN-345: User Registration ===
     public void createUser(Scanner scanner) {
         System.out.println("\n--- User Registration ---");
 
@@ -166,7 +166,7 @@ public class RentalSystem {
         System.out.println("✅ User registered successfully! (" + userType + " account created)");
     }
     // ========================================================
-    // ⬇️  KAN-370: User login logic ⬇️
+    // ⬇️  KAN-360: User login logic ⬇️
     // ========================================================
     public User login(Scanner scanner) {
         System.out.println("\n--- User Login ---");
@@ -187,5 +187,124 @@ public class RentalSystem {
 
         System.out.println("❌ Invalid username or password.");
         return null;
+    }
+    // =========================================================================
+    // ⬇️  KAN-377: Fleet Management ⬇️
+    // =========================================================================
+
+    public void addCar(Scanner scanner) {
+        System.out.println("\n--- Add New Car to Fleet ---");
+
+        // 📌 [KAN-378] בדיקת אימות התחברות והרשאות Agent בלבד
+        if (currentUser == null) {
+            System.out.println("❌ You must be logged in to add a car.");
+            return;
+        }
+
+        if (!"Agent".equalsIgnoreCase(currentUser.getUserType())) {
+            System.out.println("❌ Access Denied! Only Rental Agents can add cars to the fleet.");
+            return;
+        }
+
+        // 📌 [KAN-379] בדיקת מגלבת 10 רכבים לסוכן (Agent Car Limit Enforcement)
+        int agentCarCount = 0;
+        for (int i = 0; i < carCount; i++) {
+            if (cars[i].getOwner().getUsername().equals(currentUser.getUsername())) {
+                agentCarCount++;
+            }
+        }
+
+        if (agentCarCount >= currentUser.getCarLimit()) {
+            System.out.println("❌ Limit Reached! You cannot manage more than " + currentUser.getCarLimit() + " cars.");
+            return;
+        }
+
+        // 📌 [KAN-380] קליטת פרטי הרכב ואימות קלט (מחיר חיובי ושנת ייצור תקינה)
+        System.out.print("Enter Car Category (e.g., Sedan, SUV, Compact): ");
+        String category = scanner.nextLine().trim();
+
+        System.out.print("Enter Make (e.g., Toyota, Honda): ");
+        String make = scanner.nextLine().trim();
+
+        System.out.print("Enter Model (e.g., Civic, RAV4): ");
+        String model = scanner.nextLine().trim();
+
+        int year = 0;
+        while (true) {
+            System.out.print("Enter Year (1990 - 2026): ");
+            try {
+                year = Integer.parseInt(scanner.nextLine().trim());
+                if (year >= 1990 && year <= 2026) {
+                    break;
+                }
+                System.out.println("❌ Invalid year! Must be between 1990 and 2026.");
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Invalid input! Please enter a valid year number.");
+            }
+        }
+
+        double dailyRate = 0.0;
+        while (true) {
+            System.out.print("Enter Daily Rate ($): ");
+            try {
+                dailyRate = Double.parseDouble(scanner.nextLine().trim());
+                if (dailyRate > 0) {
+                    break;
+                }
+                System.out.println("❌ Rate must be greater than 0.");
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Invalid input! Please enter a numeric price.");
+            }
+        }
+
+        // בחירת סניף קיים במערכת
+        System.out.println("\nSelect Branch Location:");
+        for (int i = 0; i < locations.length; i++) {
+            System.out.println((i + 1) + ". " + locations[i]);
+        }
+
+        int locChoice = -1;
+        while (true) {
+            System.out.print("Choice (1-" + locations.length + "): ");
+            try {
+                locChoice = Integer.parseInt(scanner.nextLine().trim()) - 1;
+                if (locChoice >= 0 && locChoice < locations.length) {
+                    break;
+                }
+                System.out.println("❌ Invalid selection.");
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Please enter a valid number.");
+            }
+        }
+
+        Location selectedLocation = locations[locChoice];
+
+        // יצירת הרכב והוספתו למערך הרכבים
+        Car newCar = new Car(category, make, model, year, dailyRate, true, currentUser, selectedLocation);
+        cars[carCount] = newCar;
+        carCount++;
+
+        System.out.println("✅ Car added successfully to the fleet!");
+    }
+
+    // 📌 [KAN-381] מנגנון חיפוש והצגת רכבים זמינים בצי
+    public void searchCars() {
+        System.out.println("\n--- Available Cars in Fleet ---");
+        if (carCount == 0) {
+            System.out.println("ℹ️ No cars currently available in the system.");
+            return;
+        }
+
+        boolean found = false;
+        for (int i = 0; i < carCount; i++) {
+            if (cars[i].isAvailable()) {
+                System.out.println("[" + (i + 1) + "] " + cars[i]);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("ℹ️ No available cars found.");
+        }
     }
 }
