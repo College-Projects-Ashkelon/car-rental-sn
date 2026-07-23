@@ -6,6 +6,7 @@ public class RentalSystem {
     private Car[] cars;
     private int carCount;
     private Location[] locations;
+    private User currentUser;
 
     public RentalSystem() {
         // Initialize fixed-size arrays according to restrictions
@@ -14,6 +15,7 @@ public class RentalSystem {
         this.cars = new Car[100];
         this.carCount = 0;
         this.locations = new Location[10];
+        this.currentUser = null; // אין משתמש מחובר בהתחלה
 
         // Pre-populate 10 fixed locations across at least 3 cities
         initLocations();
@@ -42,6 +44,18 @@ public class RentalSystem {
 
     public int getCarCount() {
         return carCount;
+    }
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void logout() {
+        this.currentUser = null;
+        System.out.println("✅ Logged out successfully.");
     }
     // ========================================================
     // ⬇️  KAN-345 ⬇️
@@ -150,5 +164,28 @@ public class RentalSystem {
         userCount++;
 
         System.out.println("✅ User registered successfully! (" + userType + " account created)");
+    }
+    // ========================================================
+    // ⬇️  KAN-370: User login logic ⬇️
+    // ========================================================
+    public User login(Scanner scanner) {
+        System.out.println("\n--- User Login ---");
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine().trim();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine().trim();
+
+        for (int i = 0; i < userCount; i++) {
+            // בדיקת שם משתמש (Case-insensitive) ואימות סיסמה דרך checkPassword
+            if (users[i].getUsername().equalsIgnoreCase(username) && users[i].checkPassword(password)) {
+                this.currentUser = users[i];
+                System.out.println("✅ Login successful! Welcome, " + currentUser.getFullName() + " (" + currentUser.getUserType() + ")");
+                return currentUser;
+            }
+        }
+
+        System.out.println("❌ Invalid username or password.");
+        return null;
     }
 }

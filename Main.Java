@@ -1,3 +1,4 @@
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -15,6 +16,9 @@ public class Main {
 
         // 2. הרצת בדיקת הרשמת משתמשים של KAN-345
         testKAN345(scanner, system);
+
+        // 3. בדיקת התחברות KAN-360
+        testKAN360(scanner, system);
 
         scanner.close();
 
@@ -53,6 +57,21 @@ public class Main {
 
         System.out.println("Total Registered Users: " + system.getUserCount());
         System.out.println("✅ KAN-345 User Registration test completed!");
+    }
+    /**
+     * KAN-360 Verification Test
+     * בודקת את תהליך ההתחברות וניהול הסשן של המשתמש
+     */
+    public static void testKAN360(Scanner scanner, RentalSystem system) {
+        System.out.println("\n--- [Test] KAN-360: User Login ---");
+
+        // ניסיון התחברות עם המשתמש שנרשם ב-KAN-345
+        system.login(scanner);
+
+        if (system.getCurrentUser() != null) {
+            System.out.println("Active Session User: " + system.getCurrentUser().getUsername());
+        }
+        System.out.println("✅ KAN-360 User Login test completed!");
     }
 
 }
