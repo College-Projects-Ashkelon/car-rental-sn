@@ -1,30 +1,24 @@
 public class Location {
-    private int id;
-    private String name;
     private String city;
-    private String address;
+    private String branchName;
 
-    public Location(int id, String name, String city, String address) {
-        this.id = id;
-        this.name = name;
+    // Constructor
+    public Location(String city, String branchName) {
         this.city = city;
-        this.address = address;
+        this.branchName = branchName;
     }
 
     // Getters
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getCity() { return city; }
-    public String getAddress() { return address; }
+    public String getCity() {
+        return city;
+    }
 
-    // Setters
-    public void setId(int id) { this.id = id; }
-    public void setName(String name) { this.name = name; }
-    public void setCity(String city) { this.city = city; }
-    public void setAddress(String address) { this.address = address; }
+    public String getBranchName() {
+        return branchName;
+    }
 
     @Override
     public String toString() {
-        return "Location{id=" + id + ", name='" + name + "', city='" + city + "', address='" + address + "'}";
+        return city + " - " + branchName;
     }
 }
