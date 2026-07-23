@@ -307,4 +307,55 @@ public class RentalSystem {
             System.out.println("ℹ️ No available cars found.");
         }
     }
+    // =========================================================================
+    // ⬇️ [קוד חדש עבור KAN-382: KAN-383, KAN-384, KAN-385] ⬇️
+    // =========================================================================
+
+    public void searchCarsAdvanced(Scanner scanner) {
+        System.out.println("\n--- Search & Filter Available Cars ---");
+
+        if (carCount == 0) {
+            System.out.println("ℹ️ No cars currently available in the system.");
+            return;
+        }
+
+        // 📌 [KAN-383] קליטת קטגוריה לסינון
+        System.out.print("Enter Car Category to filter (or press Enter to skip): ");
+        String categoryFilter = scanner.nextLine().trim();
+
+        // 📌 [KAN-384] קליטת מחיר מקסימלי ליום ואימות קלט
+        double maxPriceFilter = -1;
+        System.out.print("Enter Maximum Daily Rate ($) (or press Enter to skip): ");
+        String priceInput = scanner.nextLine().trim();
+        if (!priceInput.isEmpty()) {
+            try {
+                maxPriceFilter = Double.parseDouble(priceInput);
+                if (maxPriceFilter < 0) {
+                    System.out.println("⚠️ Price cannot be negative. Skipping price filter.");
+                    maxPriceFilter = -1;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("⚠️ Invalid price input. Skipping price filter.");
+            }
+        }
+
+        // 📌 [KAN-385] סינון והצגת התוצאות התואמות בלבד
+        System.out.println("\n--- Search Results ---");
+        boolean found = false;
+        for (int i = 0; i < carCount; i++) {
+            Car car = cars[i];
+
+            boolean matchesCategory = categoryFilter.isEmpty() || car.getCategory().equalsIgnoreCase(categoryFilter);
+            boolean matchesPrice = (maxPriceFilter <= 0) || (car.getPricePerDay() <= maxPriceFilter);
+
+            if (car.isAvailable() && matchesCategory && matchesPrice) {
+                System.out.println("[" + (i + 1) + "] " + car);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("ℹ️ No available cars matched your criteria.");
+        }
+    }
 }

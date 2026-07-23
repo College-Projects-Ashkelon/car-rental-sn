@@ -23,6 +23,9 @@ public class Main {
         // 4. KAN-377 Test (Fleet Management: KAN-378 to KAN-381)
         testKAN377(scanner, system);
 
+        // 5. KAN-382 Test (Search & Filter: KAN-383 to KAN-385)
+        testKAN382(scanner, system);
+
         scanner.close();
 
     }
@@ -87,5 +90,14 @@ public class Main {
         system.searchCars();
 
         System.out.println("✅ KAN-377 Fleet Management test completed!");
+    }
+    // 📌 [KAN-382] פונקציית בדיקה לחיפוש וסינון (KAN-383 עד KAN-385)
+    public static void testKAN382(Scanner scanner, RentalSystem system) {
+        System.out.println("\n--- [Test] KAN-382: Search & Filter Vehicles ---");
+
+        // הרצת בדיקת החיפוש והסינון
+        system.searchCarsAdvanced(scanner);
+
+        System.out.println("✅ KAN-382 Vehicle Search test completed!");
     }
 }
