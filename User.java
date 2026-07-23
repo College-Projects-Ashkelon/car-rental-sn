@@ -12,7 +12,6 @@ public class User {
         this.licenseNumber = licenseNumber;
         this.userType = userType;
     }
-
     public String getUsername() {
         return username;
     }
@@ -24,16 +23,13 @@ public class User {
     public String getLicenseNumber() {
         return licenseNumber;
     }
-
     public String getUserType() {
         return userType;
     }
-
     // Encapsulation: Password check method (No getter for password)
     public boolean checkPassword(String inputPassword) {
         return this.password != null && this.password.equals(inputPassword);
     }
-
     // Business Logic: Car limit policy based on user type
     public int getCarLimit() {
         if ("Agent".equalsIgnoreCase(this.userType)) {
@@ -41,7 +37,6 @@ public class User {
         }
         return 3;
     }
-
     @Override
     public String toString() {
         return "User{" +
