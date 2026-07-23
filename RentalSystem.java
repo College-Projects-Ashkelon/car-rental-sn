@@ -33,11 +33,9 @@ public class RentalSystem {
         locations[8] = new Location("Eilat", "Port");
         locations[9] = new Location("Eilat", "City Center");
     }
-
     public Location[] getLocations() {
         return locations;
     }
-
     public int getUserCount() {
         return userCount;
     }
@@ -52,7 +50,6 @@ public class RentalSystem {
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
-
     public void logout() {
         this.currentUser = null;
         System.out.println("✅ Logged out successfully.");
