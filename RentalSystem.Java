@@ -358,4 +358,118 @@ public class RentalSystem {
             System.out.println("ℹ️ No available cars matched your criteria.");
         }
     }
+    // =========================================================================
+    // ⬇️ [ KAN-386: KAN-387, KAN-388, KAN-389] ⬇️
+    // =========================================================================
+    // 📌 [KAN-387 & KAN-388] ביצוע השכרת רכב
+    public void rentCar(Scanner scanner) {
+        System.out.println("\n--- Rent a Car ---");
+
+        // 📌 [KAN-387] אימות שמשתמש מחובר והוא מסוג Customer
+        if (currentUser == null) {
+            System.out.println("❌ You must be logged in to rent a car.");
+            return;
+        }
+
+        if (!"Customer".equalsIgnoreCase(currentUser.getUserType())) {
+            System.out.println("❌ Access Denied! Only Customers can rent cars.");
+            return;
+        }
+
+        // 📌 [KAN-387] בדיקת מגבלת 3 רכבים מושכרים ל-Customer
+        int activeRentals = 0;
+        for (int i = 0; i < carCount; i++) {
+            if (!cars[i].isAvailable() && currentUser.getUsername().equals(cars[i].getRentedBy())) {
+                activeRentals++;
+            }
+        }
+
+        if (activeRentals >= currentUser.getCarLimit()) {
+            System.out.println("❌ Limit Reached! You cannot rent more than " + currentUser.getCarLimit() + " cars at a time.");
+            return;
+        }
+
+        // הצגת רכבים זמינים
+        searchCars();
+        if (carCount == 0) return;
+
+        System.out.print("\nEnter the number of the car you wish to rent: ");
+        int carIndex = -1;
+        try {
+            carIndex = Integer.parseInt(scanner.nextLine().trim()) - 1;
+        } catch (NumberFormatException e) {
+            System.out.println("❌ Invalid input! Please enter a valid car number.");
+            return;
+        }
+
+        if (carIndex < 0 || carIndex >= carCount || !cars[carIndex].isAvailable()) {
+            System.out.println("❌ Invalid selection or the car is currently unavailable.");
+            return;
+        }
+
+        // 📌 [KAN-388] קליטת ימי השכרה, חישוב מחיר ועדכון סטטוס
+        int days = 0;
+        while (true) {
+            System.out.print("Enter rental duration in days: ");
+            try {
+                days = Integer.parseInt(scanner.nextLine().trim());
+                if (days > 0) break;
+                System.out.println("❌ Duration must be at least 1 day.");
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Please enter a valid number of days.");
+            }
+        }
+
+        Car selectedCar = cars[carIndex];
+        double totalPrice = selectedCar.getPricePerDay() * days;
+
+        // עדכון סטטוס ללא-זמין ורשימת השוכר
+        selectedCar.setAvailable(false);
+        selectedCar.setRentedBy(currentUser.getUsername());
+
+        System.out.println("\n🎉 Rental Confirmed!");
+        System.out.println("Vehicle: " + selectedCar.getManufacturer() + " " + selectedCar.getModel());
+        System.out.println("Duration: " + days + " days");
+        System.out.println("Total Cost: $" + totalPrice);
+    }
+
+    // 📌 [KAN-389] החזרת רכב ושחרורו חזרה לצי הרכבים הזמינים
+    public void returnCar(Scanner scanner) {
+        System.out.println("\n--- Return a Car ---");
+
+        if (currentUser == null) {
+            System.out.println("❌ You must be logged in to return a car.");
+            return;
+        }
+
+        boolean foundRented = false;
+        for (int i = 0; i < carCount; i++) {
+            if (!cars[i].isAvailable() && currentUser.getUsername().equals(cars[i].getRentedBy())) {
+                System.out.println("[" + (i + 1) + "] " + cars[i].getManufacturer() + " " + cars[i].getModel() + " (" + cars[i].getYear() + ")");
+                foundRented = true;
+            }
+        }
+
+        if (!foundRented) {
+            System.out.println("ℹ️ You have no active rentals to return.");
+            return;
+        }
+
+        System.out.print("\nEnter the number of the car you wish to return: ");
+        int carIndex = -1;
+        try {
+            carIndex = Integer.parseInt(scanner.nextLine().trim()) - 1;
+        } catch (NumberFormatException e) {
+            System.out.println("❌ Invalid input.");
+            return;
+        }
+
+        if (carIndex >= 0 && carIndex < carCount && !cars[carIndex].isAvailable() && currentUser.getUsername().equals(cars[carIndex].getRentedBy())) {
+            cars[carIndex].setAvailable(true);
+            cars[carIndex].setRentedBy(null);
+            System.out.println("✅ Car returned successfully! Thank you.");
+        } else {
+            System.out.println("❌ Invalid selection.");
+        }
+    }
 }

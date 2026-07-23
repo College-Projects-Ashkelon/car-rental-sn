@@ -7,6 +7,7 @@ public class Car {
     private boolean available;
     private User owner;        // Composition with User
     private Location location;  // Composition with Location
+    private String rentedBy; // tracks which username currently rented this car
 
     public Car(String category, String manufacturer, String model, int year, double pricePerDay, boolean available, User owner, Location location) {
         this.category = category;
@@ -28,6 +29,9 @@ public class Car {
     public void setAvailable(boolean available) { this.available = available; }
     public User getOwner() { return owner; }
     public Location getLocation() { return location; }
+    public String getRentedBy() { return rentedBy; }
+    public void setRentedBy(String rentedBy) { this.rentedBy = rentedBy; }
+
 
     @Override
     public String toString() {
@@ -35,4 +39,5 @@ public class Car {
                 ", Price/Day: $" + pricePerDay + ", Available: " + (available ? "Yes" : "No") +
                 ", Location: " + location + ", Owner: " + owner.getUsername() + "]";
     }
+
 }

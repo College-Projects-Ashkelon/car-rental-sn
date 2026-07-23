@@ -17,7 +17,7 @@ public class Main {
         // 2. הרצת בדיקת הרשמת משתמשים של KAN-345
         testKAN345(scanner, system);
 
-        // 3. בדיקת התחברות KAN-360
+        //  3. בדיקת התחברותKAN-360
         testKAN360(scanner, system);
 
         // 4. KAN-377 Test (Fleet Management: KAN-378 to KAN-381)
@@ -25,6 +25,9 @@ public class Main {
 
         // 5. KAN-382 Test (Search & Filter: KAN-383 to KAN-385)
         testKAN382(scanner, system);
+
+        // 6. KAN-386 Test (Car Rental & Return: KAN-387 to KAN-389)
+        testKAN386(scanner, system);
 
         scanner.close();
 
@@ -82,22 +85,26 @@ public class Main {
     // 📌 [KAN-377] פונקציית בדיקה המריצה את תתי-הסטורים (KAN-378 עד KAN-381)
     public static void testKAN377(Scanner scanner, RentalSystem system) {
         System.out.println("\n--- [Test] KAN-377: Fleet Management ---");
-
         // הרצת הוספת רכב לצי
         system.addCar(scanner);
-
         // הרצת חיפוש והצגת רכבים
         system.searchCars();
-
         System.out.println("✅ KAN-377 Fleet Management test completed!");
     }
     // 📌 [KAN-382] פונקציית בדיקה לחיפוש וסינון (KAN-383 עד KAN-385)
     public static void testKAN382(Scanner scanner, RentalSystem system) {
         System.out.println("\n--- [Test] KAN-382: Search & Filter Vehicles ---");
-
         // הרצת בדיקת החיפוש והסינון
         system.searchCarsAdvanced(scanner);
-
         System.out.println("✅ KAN-382 Vehicle Search test completed!");
+    }
+    // 📌 [KAN-386] פונקציית בדיקה להשכרה והחזרת רכבים (KAN-387 עד KAN-389)
+    public static void testKAN386(Scanner scanner, RentalSystem system) {
+        System.out.println("\n--- [Test] KAN-386: Car Rental & Reservation ---");
+        // הרצת השכרת רכב
+        system.rentCar(scanner);
+        // הרצת החזרת רכב
+        system.returnCar(scanner);
+        System.out.println("✅ KAN-386 Car Rental test completed!");
     }
 }
