@@ -1,4 +1,3 @@
-
 import java.util.Random;
 import java.util.Scanner;
 
@@ -28,6 +27,9 @@ public class Main {
 
         // 6. KAN-386 Test (Car Rental & Return: KAN-387 to KAN-389)
         testKAN386(scanner, system);
+
+        // 7. KAN-440 Test (Secure Password Change)
+        testKAN440(scanner, system);
 
         scanner.close();
 
@@ -106,5 +108,11 @@ public class Main {
         // הרצת החזרת רכב
         system.returnCar(scanner);
         System.out.println("✅ KAN-386 Car Rental test completed!");
+    }
+
+    public static void testKAN440(Scanner scanner, RentalSystem system) {
+        System.out.println("\n--- [Test] KAN-440: Secure Password Change ---");
+        system.changePassword(scanner);
+        System.out.println("✅ KAN-440 Password Change test completed!");
     }
 }

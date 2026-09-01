@@ -3,15 +3,17 @@ public class User {
     private String password;
     private String fullName;
     private String licenseNumber;
-    private String userType; // "Customer" or "Agent"
+    private String userType;
 
-    public User(String username, String password, String fullName, String licenseNumber, String userType) {
+    public User(String username, String password, String fullName,
+                String licenseNumber, String userType) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.licenseNumber = licenseNumber;
         this.userType = userType;
     }
+
     public String getUsername() {
         return username;
     }
@@ -23,20 +25,27 @@ public class User {
     public String getLicenseNumber() {
         return licenseNumber;
     }
+
     public String getUserType() {
         return userType;
     }
-    // Encapsulation: Password check method (No getter for password)
+
     public boolean checkPassword(String inputPassword) {
-        return this.password != null && this.password.equals(inputPassword);
+        return password != null && password.equals(inputPassword);
     }
-    // Business Logic: Car limit policy based on user type
+
+    public void changePassword(String newPassword) {
+        password = newPassword;
+    }
+
     public int getCarLimit() {
-        if ("Agent".equalsIgnoreCase(this.userType)) {
+        if ("Agent".equalsIgnoreCase(userType)) {
             return 10;
         }
+
         return 3;
     }
+
     @Override
     public String toString() {
         return "User{" +

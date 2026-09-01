@@ -469,4 +469,54 @@ public class RentalSystem {
             System.out.println("❌ Invalid selection.");
         }
     }
+
+    // =========================================================================
+    // KAN-440 / REQ-008: Secure password change
+    // =========================================================================
+    public void changePassword(Scanner scanner) {
+        System.out.println("\n--- Change Password ---");
+
+        if (currentUser == null) {
+            System.out.println("❌ You must be logged in to change your password.");
+            return;
+        }
+
+        while (true) {
+            System.out.print("Enter current password: ");
+            String currentPassword = scanner.nextLine().trim();
+
+            if (currentUser.checkPassword(currentPassword)) {
+                break;
+            }
+
+            System.out.println("❌ Current password is incorrect. Please try again.");
+        }
+
+        while (true) {
+            System.out.print("Enter new password: ");
+            String newPassword = scanner.nextLine().trim();
+
+            if (!isStrongPassword(newPassword)) {
+                System.out.println("❌ Weak password! Password must contain at least one digit and one special character ($, %, _).");
+                continue;
+            }
+
+            if (currentUser.checkPassword(newPassword)) {
+                System.out.println("❌ New password must be different from the current password.");
+                continue;
+            }
+
+            System.out.print("Confirm new password: ");
+            String confirmation = scanner.nextLine().trim();
+
+            if (!newPassword.equals(confirmation)) {
+                System.out.println("❌ Password confirmation does not match. Please try again.");
+                continue;
+            }
+
+            currentUser.changePassword(newPassword);
+            System.out.println("✅ Password changed successfully.");
+            return;
+        }
+    }
 }
